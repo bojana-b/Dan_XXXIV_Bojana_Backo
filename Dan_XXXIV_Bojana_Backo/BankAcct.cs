@@ -2,42 +2,56 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Dan_XXXIV_Bojana_Backo
 {
+    // Class BankAcct represent Bank Account
+    // Two Withdraw functions, one for each ATM 
     class BankAcct
     {
         private Object acctLock = new object();
         double Balance { set; get; }
-        Random random = new Random();
 
         public BankAcct(double bal)
         {
             Balance = bal;
         }
-        public double Withdraw(double amt)
+        public void WithdrawMachineOne(double amt)
         {
             if((Balance - amt) < 0)
             {
-                Console.WriteLine("Sorry {0} in Account", Balance);
-                return Balance;
+                Console.WriteLine("{0} is trying to withdraw {1} RSD", Thread.CurrentThread.Name, amt);
+                Console.WriteLine("Sorry you are trying to withdraw {0} from ATM_1, but in Account is only {1}", amt, Balance);
             }
+            // Lock the critical section of code
             lock (acctLock)
             {
                 if(Balance >= amt)
                 {
-                    Console.WriteLine("Removed {0} and {1} left in Account", amt, (Balance - amt));
+                    Console.WriteLine("{0} is trying to withdraw {1} RSD.", Thread.CurrentThread.Name, amt);
+                    Console.WriteLine("Removed {0} from ATM_1 and {1} left in Account.", amt, (Balance - amt));
                     Balance -= amt;
                 }
-                return Balance;
             }
         }
-        public void DoTransactions(int persons)
+        public void WithdrawMachineTwo(double amt)
         {
-            for (int i = 0; i < persons; i++)
+            if ((Balance - amt) < 0)
             {
-                Withdraw(random.Next(100, 10001));
+                Console.WriteLine("{0} is trying to withdraw {1} RSD.", Thread.CurrentThread.Name, amt);
+                Console.WriteLine("Sorry you are trying to withdraw {0} from ATM_2, but in Account is only {1}.", amt, Balance);
+            }
+            // Lock the critical section of code
+            lock (acctLock)
+            {
+                if (Balance >= amt)
+                {
+                    Console.WriteLine("{0} is trying to withdraw {1} RSD", Thread.CurrentThread.Name, amt);
+                    Console.WriteLine("Removed {0} from ATM_2 and {1} left in Account", amt, (Balance - amt));
+                    Balance -= amt;
+                }
             }
         }
     }
