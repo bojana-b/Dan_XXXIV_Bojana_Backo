@@ -9,8 +9,8 @@ namespace Dan_XXXIV_Bojana_Backo
         {
             Random random = new Random();
             bool repeat = false;
-            int numberOfClientsATM1 = 0;
-            int numberOfClientsATM2 = 0;
+            uint numberOfClientsATM1 = 0;
+            uint numberOfClientsATM2 = 0;
             BankAcct acct = new BankAcct(10000);
             do
             {
@@ -21,14 +21,14 @@ namespace Dan_XXXIV_Bojana_Backo
                     Console.WriteLine("\nYou must provide some input!");
                     repeat = true;
                 }
-                else if (!Int32.TryParse(input, out numberOfClientsATM1))
+                else if (!UInt32.TryParse(input, out numberOfClientsATM1))
                 {
-                    Console.WriteLine("Read instructions!!!!");
+                    Console.WriteLine("\nRead instructions!!!!");
                     repeat = true;
                 }
                 else
                 {
-                    numberOfClientsATM1 = Int32.Parse(input);
+                    numberOfClientsATM1 = UInt32.Parse(input);
                     repeat = false;
                 }
             } while (repeat);
@@ -42,14 +42,14 @@ namespace Dan_XXXIV_Bojana_Backo
                     Console.WriteLine("\nYou must provide some input!");
                     repeat = true;
                 }
-                else if (!Int32.TryParse(input, out numberOfClientsATM2))
+                else if (!UInt32.TryParse(input, out numberOfClientsATM2))
                 {
                     Console.WriteLine("\nRead instructions!!!!");
                     repeat = true;
                 }
                 else
                 {
-                    numberOfClientsATM2 = Int32.Parse(input);
+                    numberOfClientsATM2 = UInt32.Parse(input);
                     repeat = false;
                 }
             } while (repeat);
@@ -60,14 +60,14 @@ namespace Dan_XXXIV_Bojana_Backo
             Thread[] threads = new Thread[numberOfClientsATM1 + numberOfClientsATM2];
 
             // Create Threads for clients for ATM1
-            for (int i = 0; i < numberOfClientsATM1; i++)
+            for (uint i = 0; i < numberOfClientsATM1; i++)
             {
                 Thread t = new Thread(() => acct.WithdrawMachineOne(random.Next(100, 10001)));
                 threads[i] = t;
                 threads[i].Name = string.Format("Client_{0}_ATM1", i + 1);
             }
             // Create Threads for clients for ATM2
-            for (int i = numberOfClientsATM1; i < numberOfClientsATM2 + numberOfClientsATM1; i++)
+            for (uint i = numberOfClientsATM1; i < numberOfClientsATM2 + numberOfClientsATM1; i++)
             {
                 Thread t = new Thread(() => acct.WithdrawMachineTwo(random.Next(100, 10001)));
                 threads[i] = t;
